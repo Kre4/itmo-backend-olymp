@@ -1,12 +1,10 @@
 package com.itmo.olymp;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.itmo.olymp.dto.movie.MovieDto;
 import com.itmo.olymp.dto.movie.MovieWrapper;
-import com.itmo.olymp.entity.Director;
 import com.itmo.olymp.entity.Movie;
+import com.itmo.olymp.exception.RequiredFieldException;
 import com.itmo.olymp.exception.ValidationException;
-import com.itmo.olymp.service.DirectorService;
 import com.itmo.olymp.service.MovieService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
@@ -16,14 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.lang.reflect.Executable;
-import java.text.ParseException;
 import java.util.List;
 
 @SpringBootTest
 @ActiveProfiles("test")
 @Sql("/data.sql")
-class MovieApplicationTests {
+class MovieTests {
 
     static Integer movieId1 = 1;
     static Integer movieId2 = 2;
@@ -32,9 +28,6 @@ class MovieApplicationTests {
 
     @Autowired
     MovieService movieService;
-
-    @Autowired
-    DirectorService directorService;
 
     @Test
     void testFindByIdMovie() {
@@ -50,13 +43,13 @@ class MovieApplicationTests {
     }
 
     @Test
-    void testSaveNewMovie() throws ParseException {
+    void testSaveNewMovie() {
         MovieWrapper movieWrapper = new MovieWrapper(
                 MovieDto.builder()
                         .year(2002)
                         .build()
         );
-        Assertions.assertThrows(NullPointerException.class, () -> movieService.save(movieWrapper));
+        Assertions.assertThrows(RequiredFieldException.class, () -> movieService.save(movieWrapper));
 
         MovieWrapper movieWrapperIncorrectYear = new MovieWrapper(
                 MovieDto.builder()
