@@ -10,7 +10,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.util.List;
 
 @Service
@@ -31,6 +30,7 @@ public class DirectorService {
         if (directorWrapper.getDirector().getId() != null)
             findById(directorWrapper.getDirector().getId());
         Director director = EntityMapper.mapDirectorWrapperToEntity(directorWrapper);
+        ValidationUtils.validateNotNull(director.getName(), "Fio");
         ValidationUtils.validateStringOrThrow(director.getName(), 100, "Fio");
         return directorRepository.save(director);
     }

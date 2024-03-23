@@ -8,8 +8,8 @@ import com.itmo.olymp.dto.movie.MovieListWrapper;
 import com.itmo.olymp.dto.movie.MovieWrapper;
 import com.itmo.olymp.entity.Director;
 import com.itmo.olymp.entity.Movie;
+import com.itmo.olymp.exception.RequiredFieldException;
 import lombok.experimental.UtilityClass;
-import org.springframework.stereotype.Service;
 
 import java.sql.Time;
 import java.text.ParseException;
@@ -49,6 +49,9 @@ public class EntityMapper {
 
     private Movie mapMovieDtoToEntity(MovieDto movieDto) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+        if (movieDto.getLength() == null) {
+            throw new RequiredFieldException("Movie length");
+        }
         return Movie.builder()
                 .id(movieDto.getId())
                 .year(movieDto.getYear())

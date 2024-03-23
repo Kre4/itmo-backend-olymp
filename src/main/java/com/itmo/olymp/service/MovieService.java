@@ -32,6 +32,9 @@ public class MovieService {
             findById(movieWrapper.getMovie().getId());
 
         Movie movie = EntityMapper.mapMovieWrapperToEntity(movieWrapper);
+
+        ValidationUtils.validateNotNull(movie.getDirector().getId(), "Director identifier ");
+        ValidationUtils.validateNotNull(movie.getLength(), "Movie length");
         ValidationUtils.validateIntegerOrThrow(movie.getYear(), 1900, 2100, "Year");
         ValidationUtils.validateIntegerOrThrow(movie.getRating(), 0, 10, "Rating");
         ValidationUtils.validateStringOrThrow(movie.getTitle(), 100, "Titile");
